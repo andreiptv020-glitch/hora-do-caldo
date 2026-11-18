@@ -1,0 +1,7 @@
+dados/
+dist/
+build/
+node_modules/
+android/
+__pycache__/
+*.spec
