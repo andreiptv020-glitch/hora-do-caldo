@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>HR ENTREGADOR</title>
+<style>
+:root{--red:#b3261e;--red2:#d6402b;--ink:#2a1512;--mut:#7a6a64;--bg:#f7f2ec;--line:#eadfd6;--ok:#2e7d32}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden}body{font-family:system-ui,-apple-system,Roboto,"Segoe UI",Arial,sans-serif;background:#000;color:var(--ink);-webkit-user-select:none;user-select:none}
+.screen{position:fixed;inset:0;display:none}
+input{width:100%;padding:15px;border:1.5px solid var(--line);border-radius:14px;font-size:16px;background:#fdfaf7;outline:none;margin-bottom:12px;font-family:inherit;-webkit-user-select:text;user-select:text}
+input:focus{border-color:var(--red);background:#fff}
+.big{width:100%;padding:18px;border:0;border-radius:16px;background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;font-size:18px;font-weight:800;box-shadow:0 8px 20px #b3261e44;font-family:inherit}
+.big.ok{background:linear-gradient(135deg,#3b9a40,var(--ok));box-shadow:0 8px 20px #2e7d3244}.big.sec{background:#eadfd6;color:var(--ink);box-shadow:none}.big:disabled{opacity:.6}
+/* login */
+#login{background:radial-gradient(circle at 20% 0%,#8a2218,#2a1512 65%);flex-direction:column;justify-content:center;padding:28px}
+#login .box{background:#fff;border-radius:26px;padding:30px 24px;box-shadow:0 30px 60px #0006}
+.logo{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,var(--red2),var(--red));display:grid;place-items:center;font-size:36px;margin:0 auto 12px}
+#login h1{text-align:center;margin:0;font-size:22px}#login p{text-align:center;margin:4px 0 20px;color:var(--mut);font-size:14px}
+.err{background:#fde8e6;color:#9b1c14;padding:11px 14px;border-radius:12px;font-size:14px;margin-bottom:12px;display:none}
+.link{background:none;border:0;color:#d9c9bf;margin-top:18px;font-size:13px;text-decoration:underline}
+/* scanner */
+#scan{background:#000}
+#video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#mask{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at center,transparent 0,transparent 30vmin,#000a 31vmin)}
+#frame{width:62vmin;height:62vmin;position:relative}
+#frame i{position:absolute;width:11vmin;height:11vmin;border:5px solid #fff;border-radius:10px}
+#frame i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0}#frame i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0}
+#frame i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0}#frame i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0}
+#line{position:absolute;left:6%;right:6%;height:3px;background:#ff5a45;box-shadow:0 0 12px #ff5a45;animation:sc 2s ease-in-out infinite alternate}
+@keyframes sc{from{top:8%}to{top:92%}}
+#top{position:absolute;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;color:#fff;background:linear-gradient(#000a,transparent)}
+#top b{flex:1;font-size:17px}#top button{background:#ffffff30;border:0;color:#fff;border-radius:12px;height:40px;padding:0 14px;font-size:15px;font-weight:700}
+#hint{position:absolute;left:0;right:0;bottom:0;padding:20px 20px calc(env(safe-area-inset-bottom) + 24px);text-align:center;color:#fff;background:linear-gradient(transparent,#000b);font-size:17px;font-weight:600}
+#hint small{display:block;margin-top:8px;font-weight:400;opacity:.8}
+#hint button{margin-top:10px;background:none;border:0;color:#fff;text-decoration:underline;font-size:14px}
+#camerr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;text-align:center;padding:30px;background:#000e}
+#camerr .big{max-width:320px}
+/* resultado */
+#res,#done{background:var(--bg);flex-direction:column}
+.rh{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 20px 18px}
+.rh small{opacity:.85;font-size:13px}.rh h2{margin:2px 0 0;font-size:26px;line-height:1.15}
+.rb{flex:1;overflow-y:auto;padding:16px 16px 10px}
+.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px #5a2a1a14}
+.card .k{font-size:12px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.card .v{font-size:17px;font-weight:600}
+.l{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:17px;border-bottom:1px dashed var(--line)}.l:last-child{border:0}.l b{white-space:nowrap}
+.tot{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:10px;margin-top:4px;border-top:2px solid var(--line)}
+.rf{padding:12px 16px calc(env(safe-area-inset-bottom) + 16px);display:grid;gap:10px;background:linear-gradient(transparent,var(--bg) 25%)}
+.warn{background:#fff3d6;color:#8a5a00;padding:12px 14px;border-radius:14px;font-weight:700;margin-bottom:12px}
+#done{justify-content:center;align-items:center;text-align:center;padding:30px;gap:14px;background:linear-gradient(160deg,#3b9a40,#1e6b34);color:#fff}
+#done .chk{width:120px;height:120px;border-radius:50%;background:#fff;color:var(--ok);display:grid;place-items:center;font-size:70px;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+#done h2{margin:6px 0 0;font-size:28px}#done p{margin:0;font-size:17px;opacity:.9}#done .big{max-width:340px;background:#fff;color:var(--ok);box-shadow:none;margin-top:18px}
+#toast{position:fixed;top:calc(env(safe-area-inset-top) + 70px);left:14px;right:14px;background:#2a1512;color:#fff;padding:15px;border-radius:14px;display:none;z-index:30;text-align:center;font-weight:600}
+</style></head><body>
+
+<div class="screen" id="login">
+  <div class="box">
+    <div class="logo">🛵</div><h1>HR ENTREGADOR</h1><p>Entre com seu usuário de entregador</p>
+    <div class="err" id="lerr"></div>
+    <input id="lu" placeholder="Usuário" autocapitalize="none" autocomplete="username">
+    <input id="lp" type="password" placeholder="Senha" autocomplete="current-password">
+    <button class="big" id="lbtn" onclick="doLogin()">Entrar</button>
+  </div>
+  <button class="link" onclick="chgSite()">Alterar endereço do site</button>
+</div>
+
+<div class="screen" id="scan">
+  <video id="video" playsinline muted autoplay></video>
+  <div id="mask"><div id="frame"><i></i><i></i><i></i><i></i><div id="line"></div></div></div>
+  <div id="top"><b>🛵 HR ENTREGADOR</b><button onclick="logout()">Sair</button></div>
+  <div id="hint">Aponte a câmera para o QR Code do pedido<small id="who"></small><button onclick="manual()">Digitar código manualmente</button></div>
+  <div id="camerr"><div style="font-size:50px">📷</div><div id="camtxt">Permita o uso da câmera para ler o QR Code.</div><button class="big" onclick="startCam()">Tentar novamente</button></div>
+</div>
+
+<div class="screen" id="res">
+  <div class="rh"><small id="rnum"></small><h2 id="rcli"></h2></div>
+  <div class="rb" id="rbody"></div>
+  <div class="rf" id="rfoot"></div>
+</div>
+
+<div class="screen" id="done">
+  <div class="chk">✓</div><h2>Entrega registrada!</h2><p id="dtxt"></p>
+  <button class="big" onclick="again()">Ler próximo pedido</button>
+</div>
+<div id="toast"></div>
+<canvas id="cv" style="display:none"></canvas>
+
+<script src="config.js"></script>
+<script src="jsQR.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const LS={get:k=>{try{return localStorage.getItem(k)||""}catch(e){return""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+const R=v=>"R$ "+Number(v).toFixed(2).replace(".",",");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let token=LS.get("token"),stream=null,scanning=false,cur="",busy=false,lastBad="",lastBadAt=0;
+function site(){return (LS.get("site")||(window.APP_CONFIG&&APP_CONFIG.SITE_URL)||"").replace(/\/+$/,"")}
+function show(id){["login","scan","res","done"].forEach(s=>$(s).style.display=s===id?"flex":"none");if(id==="scan")$("scan").style.display="block"}
+function toast(t,ms){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",ms||3200)}
+async function api(r,data){
+  const o={headers:{"X-Token":token}};
+  if(data!==undefined){o.method="POST";o.headers["Content-Type"]="application/json";o.body=JSON.stringify(data)}
+  let res;try{res=await fetch(site()+"/api.php?r="+r,o)}catch(e){throw new Error("Sem conexão com o site. Verifique a internet.")}
+  let j={};try{j=await res.json()}catch(e){throw new Error("Resposta inválida do site (confira o endereço).")}
+  if(res.status===401&&r!=="login"){logout(true);throw new Error("Sessão expirada. Entre de novo.")}
+  if(!res.ok||j.error)throw new Error(j.error||("Erro "+res.status));return j}
+function chgSite(){const v=prompt("Endereço do site (ex: https://meusite.com.br)",site());if(v!==null){LS.set("site",v.trim().replace(/\/+$/,""));toast("Endereço salvo")}}
+async function doLogin(){
+  const b=$("lbtn"),er=$("lerr");er.style.display="none";b.disabled=true;b.textContent="Entrando...";
+  try{const j=await api("login",{username:$("lu").value.trim(),password:$("lp").value});
+    if(j.role!=="entregador"&&j.role!=="admin"){throw new Error("Este usuário não é entregador. Peça para cadastrarem como Entregador no painel.")}
+    token=j.token;LS.set("token",token);LS.set("name",j.name);$("lp").value="";start()}
+  catch(e){er.textContent=e.message;er.style.display="block"}
+  b.disabled=false;b.textContent="Entrar"}
+function logout(silent){stopCam();if(!silent&&token)api("logout",{}).catch(()=>{});token="";LS.del("token");show("login")}
+function start(){$("who").textContent="Entregador: "+LS.get("name");show("scan");startCam()}
+
+// ---------- câmera ----------
+async function startCam(){
+  $("camerr").style.display="none";
+  try{
+    stopCam();
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},audio:false});
+    const v=$("video");v.srcObject=stream;await v.play();scanning=true;requestAnimationFrame(tick)
+  }catch(e){$("camtxt").textContent="Não consegui abrir a câmera. Permita o acesso à câmera nas permissões do app e tente de novo.";$("camerr").style.display="flex"}}
+function stopCam(){scanning=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
+let lastTick=0;
+function tick(ts){
+  if(!scanning)return;
+  if(ts-lastTick>120){lastTick=ts;
+    const v=$("video");
+    if(v.readyState>=2&&v.videoWidth){
+      const c=$("cv"),sc=Math.min(1,720/v.videoWidth);c.width=Math.floor(v.videoWidth*sc);c.height=Math.floor(v.videoHeight*sc);
+      const x=c.getContext("2d",{willReadFrequently:true});x.drawImage(v,0,0,c.width,c.height);
+      const img=x.getImageData(0,0,c.width,c.height);
+      const q=window.jsQR&&jsQR(img.data,c.width,c.height,{inversionAttempts:"dontInvert"});
+      if(q&&q.data)onCode(q.data.trim())}}
+  requestAnimationFrame(tick)}
+async function onCode(code){
+  if(busy)return;
+  if(!code.startsWith("HDC|")){ if(code!==lastBad||Date.now()-lastBadAt>3000){lastBad=code;lastBadAt=Date.now();toast("Esse QR Code não é de um pedido de entrega")}return}
+  busy=true;scanning=false;if(navigator.vibrate)navigator.vibrate(60);
+  try{await lookup(code)}catch(e){toast(e.message,4500);scanning=true;requestAnimationFrame(tick);setTimeout(()=>busy=false,1500);return}
+  busy=false}
+function manual(){const c=prompt("Digite o código impresso abaixo do QR (começa com HDC|)");if(c&&c.trim())onCode(c.trim())}
+
+// ---------- pedido ----------
+async function lookup(code){
+  const o=await api("entrega_info",{code});cur=code;stopCam();
+  $("rnum").textContent="ENTREGA #"+o.id;$("rcli").textContent=o.cliente||"Cliente";
+  let h="";
+  if(o.cancelado)h+='<div class="warn">⛔ Este pedido foi CANCELADO.</div>';
+  else if(o.delivered_at)h+='<div class="warn">✔ Este pedido já foi entregue às '+esc(o.delivered_at.slice(11,16))+'.</div>';
+  if(o.endereco)h+='<div class="card"><div class="k">Endereço</div><div class="v">📍 '+esc(o.endereco)+'</div></div>';
+  if(o.telefone)h+='<div class="card"><div class="k">Telefone</div><div class="v">☎ '+esc(o.telefone)+'</div></div>';
+  h+='<div class="card"><div class="k">O que foi pedido</div>'+o.items.map(i=>'<div class="l"><span>'+i.qty+'x '+esc(i.name)+'</span></div>').join('')+'<div class="tot"><span>Total do pedido</span><span>'+R(o.total)+'</span></div></div>';
+  if(o.note)h+='<div class="card"><div class="k">Observação</div><div class="v">'+esc(o.note)+'</div></div>';
+  $("rbody").innerHTML=h;
+  const canDo=!o.cancelado&&!o.delivered_at;
+  $("rfoot").innerHTML=(canDo?'<button class="big ok" id="okb" onclick="confirmar()">✔ ENTREGA FEITA</button>':'')+'<button class="big sec" onclick="again()">'+(canDo?'Cancelar / ler outro':'Ler outro pedido')+'</button>';
+  show("res")}
+async function confirmar(){
+  const b=$("okb");b.disabled=true;b.textContent="Registrando...";
+  try{const o=await api("entrega_confirmar",{code:cur});if(navigator.vibrate)navigator.vibrate([80,50,80]);
+    $("dtxt").textContent="Pedido #"+o.id+" - "+(o.cliente||"")+" marcado como entregue no site.";show("done")}
+  catch(e){toast(e.message,5000);b.disabled=false;b.textContent="✔ ENTREGA FEITA"}}
+function again(){cur="";busy=false;show("scan");startCam()}
+
+$("lp").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+if(token)start();else show("login");
+</script></body></html>
