@@ -1,4 +1,4 @@
-name: Gerar APK (HR ENTREGADOR)
+name: Gerar APK (HR DO CALDO APP)
 
 on:
   push:
@@ -25,16 +25,8 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Copiar leitor de QR Code
-        run: cp node_modules/jsqr/dist/jsQR.js www/jsQR.js
-
       - name: Criar projeto Android
         run: npx cap add android
-
-      - name: Permitir uso da câmera
-        run: |
-          sed -i 's#<application#<uses-permission android:name="android.permission.CAMERA" />\n    <uses-feature android:name="android.hardware.camera" android:required="false" />\n    <application#' android/app/src/main/AndroidManifest.xml
-          grep -n "CAMERA" android/app/src/main/AndroidManifest.xml
 
       - name: Sincronizar
         run: npx cap sync android
@@ -48,5 +40,5 @@ jobs:
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: HR_ENTREGADOR
+          name: HR_DO_CALDO_APP
           path: app/android/app/build/outputs/apk/debug/app-debug.apk
