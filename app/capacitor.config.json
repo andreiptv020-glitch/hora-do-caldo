@@ -1,0 +1,12 @@
+{
+  "appId": "com.horadocaldo.app",
+  "appName": "HR DO CALDO APP",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorHttp": { "enabled": true }
+  }
+}
