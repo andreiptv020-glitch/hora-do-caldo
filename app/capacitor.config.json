@@ -1,0 +1,12 @@
+{
+  "appId": "com.horadocaldo.entregador",
+  "appName": "HR ENTREGADOR",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorHttp": { "enabled": true }
+  }
+}
